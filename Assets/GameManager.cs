@@ -1,10 +1,12 @@
 using System;
+using TMPro;
 using UnityEditor.VisionOS;
 using UnityEngine;
 using UnityEngine.UI;
 
 public static class GameManager
 {
+    public static Action OnTurnChanged;
     public enum Turn
     {
         WhitesTurn,
@@ -25,6 +27,7 @@ public static class GameManager
             playerTurn = Turn.WhitesTurn;
         }
 
+        OnTurnChanged?.Invoke();
         Debug.Log($"Turn changed to: {playerTurn}");
     }
 }

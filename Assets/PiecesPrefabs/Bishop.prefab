@@ -158,6 +158,11 @@ MonoBehaviour:
   blackSprite: {fileID: -3448466328585167191, guid: 1e3f35aad2b4cdd46ba76bcfb36233f3, type: 3}
   whiteSprite: {fileID: 904179075512932255, guid: bf0bda3d713a44f45887037b1f6b48d4, type: 3}
   pieceColor: 0
+  moveTime: 0.25
+  moving: 0
+  startPos: {x: 0, y: 0}
+  endPos: {x: 0, y: 0}
+  elapsedTime: 0
   spriteRenderer: {fileID: 4280650450731251306}
 --- !u!1001 &3440173685934149824
 PrefabInstance:

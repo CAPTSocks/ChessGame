@@ -5,9 +5,6 @@ using UnityEngine.UIElements;
 
 public class Rook : Piece
 {
-    //public Sprite sprite;
-    //public PieceColor pColor;
-
     private static readonly Vector2Int[] Directions =
 {
     new Vector2Int(-1, 0), // Left
@@ -15,18 +12,6 @@ public class Rook : Piece
     new Vector2Int( 0, 1), // Up
     new Vector2Int( 0,-1), // Down
 };
-
-    public override void IntializePiece(Vector2Int spawnCordiante, Vector2 spawnPos, PieceColor color, Grid grid)
-    {
-        cordinates = spawnCordiante;
-        transform.position = spawnPos;
-        pieceColor = color;
-        gridRef = grid;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        highlightSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        highlightSprite.enabled = false;
-        PickColor();
-    }
 
     public override List<Vector2> LegalMoves()
     {
@@ -64,7 +49,12 @@ public class Rook : Piece
     {
         hasMoved = true;
         cordinates = moveTile.gridPos;
-        transform.position = moveTile.transform.position;
+
+        startPos = transform.position;
+        endPos = moveTile.transform.position;
+        elapsedTime = 0;
+        moving = true;
+        //transform.position = moveTile.transform.position;
     }
 
     public override void checkTake()
@@ -81,6 +71,18 @@ public class Rook : Piece
     // Update is called once per frame
     void Update()
     {
-        
+        if (elapsedTime < moveTime && moving == true)
+        {
+            // Increment elapsed time each frame
+            elapsedTime += Time.deltaTime;
+
+            // Calculate percentage of completion (0.0 to 1.0)
+            float percentageComplete = elapsedTime / moveTime;
+
+            // Linearly interpolate between the two vectors
+            transform.position = Vector2.Lerp(startPos, endPos, percentageComplete);
+        }
+        else
+            moving = false;
     }
 }

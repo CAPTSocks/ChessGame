@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -29,18 +30,6 @@ public class Knight : Piece
     void Start()
     {
         moveTime = moveTime / 2;
-    }
-
-    public override void IntializePiece(Vector2Int spawnCordiante, Vector2 spawnPos, PieceColor color, Grid grid)
-    {
-        cordinates = spawnCordiante;
-        transform.position = spawnPos;
-        pieceColor = color;
-        gridRef = grid;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        highlightSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        highlightSprite.enabled = false;
-        PickColor();
     }
 
     public override List<Vector2> LegalMoves()
@@ -82,11 +71,13 @@ public class Knight : Piece
         endMove = firstMove;
         elapsedTime = 0;
         movedX = false;
+        moving = true;
         //transform.position = moveTile.transform.position;
     }
 
     private void HandleSecondMove()
     {
+        moving = true;
         startPos = transform.position;
         endMove = secondMove;
         elapsedTime = 0; 
@@ -106,7 +97,7 @@ public class Knight : Piece
     // Update is called once per frame
     void Update()
     {
-        if (elapsedTime < moveTime)
+        if (elapsedTime < moveTime && moving == true)
         {
             // Increment elapsed time each frame
             elapsedTime += Time.deltaTime;
@@ -123,6 +114,10 @@ public class Knight : Piece
                 HandleSecondMove();
             }
             
+        }
+        else
+        {
+            moving = false;
         }
     }
 }

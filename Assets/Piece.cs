@@ -12,6 +12,13 @@ public abstract class Piece : MonoBehaviour
     public Sprite whiteSprite;
     public PieceColor pieceColor;
 
+    //Sliding movement variables
+    public float moveTime = .25f;
+    public bool moving = false;
+    public Vector2 startPos = Vector2.zero;
+    public Vector2 endPos = Vector2.zero;
+    public float elapsedTime = 0f;
+
     public SpriteRenderer spriteRenderer;
 
     protected SpriteRenderer highlightSprite;
@@ -29,7 +36,18 @@ public abstract class Piece : MonoBehaviour
         PickColor();
     }
 
-    public abstract void IntializePiece(Vector2Int spawnCordinate, Vector2 spawnPos, PieceColor color, Grid grid);
+    public void IntializePiece(Vector2Int spawnCordinate, Vector2 spawnPos, PieceColor color, Grid grid)
+    {
+        cordinates = spawnCordinate;
+        transform.position = spawnPos;
+        pieceColor = color;
+        gridRef = grid;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        highlightSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        highlightSprite.enabled = false;
+        PickColor();
+    }
+
     public abstract List<Vector2> LegalMoves();
 
     public abstract void Move(Tile moveTile);

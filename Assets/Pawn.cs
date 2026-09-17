@@ -8,11 +8,11 @@ public class Pawn : Piece
 {
     //public Sprite sprite;
    // public PieceColor pColor;
-    private float moveTime = .25f;
-    private bool moving = false;
-    private Vector2 startPos = Vector2.zero;
-    private Vector2 endPos = Vector2.zero;
-    private float elapsedTime = 0f;
+    //private float moveTime = .25f;
+    //private bool moving = false;
+    //private Vector2 startPos = Vector2.zero;
+    //private Vector2 endPos = Vector2.zero;
+    //private float elapsedTime = 0f;
 
     private static readonly Vector2Int[] AttackDirections =
     {
@@ -24,28 +24,6 @@ public class Pawn : Piece
     void Start()
     {
         
-    }
-
-    public override void IntializePiece(Vector2Int spawnCordiante, Vector2 spawnPos, PieceColor color, Grid grid)
-    {
-        cordinates = spawnCordiante;
-        transform.position = spawnPos;
-        pieceColor = color;
-        gridRef = grid;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        highlightSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        highlightSprite.enabled = false;
-        PickColor();
-        
-
-        //if (pieceColor == PieceColor.White)
-        //{
-        //    spriteRenderer.sprite = whiteSprite;
-        //}
-        //else
-        //{
-        //    spriteRenderer.sprite = blackSprite;
-        //}
     }
 
     public override List<Vector2> LegalMoves()
