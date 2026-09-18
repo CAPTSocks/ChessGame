@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -27,6 +28,8 @@ public class Grid : MonoBehaviour
 
     [SerializeField]
     private GameObject graveyardRef;
+    [SerializeField]
+    private HUD hudRef;
     // private SpriteRenderer blackTileSprite, whiteTileSprite;
 
     private void Awake()
@@ -229,7 +232,10 @@ public class Grid : MonoBehaviour
 
             }
             highLightedTiles.Clear();
-            selectedPiece.toggleHighlight();
+            if(selectedPiece != null)
+            {
+                selectedPiece.toggleHighlight();
+            }
             selectedPiece = null;
         }
     }
@@ -297,6 +303,32 @@ public class Grid : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public void PromotePawn(Piece pawn, Tile tile)
+    {
+        StartCoroutine(PromotePawnRoutine(pawn, tile));
+    }
+
+    IEnumerator PromotePawnRoutine(Piece pawn, Tile tile)
+    {
+        Piece promotedPiece = null;
+        hudRef.ShowPawnPromotionPanel();
+        yield return new WaitUntil(() => hudRef.SelectedPromotionPiece != null);
+        Debug.Log("This is reached");
+        promotedPiece = hudRef.SelectedPromotionPiece;
+        //Remove the pawn from the tile and send it to the graveyard
+        tile.RemovePiece();
+        var graveyardCode = graveyardRef.GetComponent<Graveyard>();
+        if (graveyardCode != null)
+        {
+            graveyardCode.SendToGraveyard(pawn);
+        }
+        promotedPiece = Instantiate(promotedPiece);
+        tile.AddPiece(promotedPiece);
+        promotedPiece.IntializePiece(tile.gridPos, tile.transform.position, pawn.pieceColor, this);
+
+        //Instantiate the promoted piece and add it to the tile
     }
 
 }

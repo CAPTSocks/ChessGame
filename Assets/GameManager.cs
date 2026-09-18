@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public static class GameManager
 {
     public static Action OnTurnChanged;
+    public static Action OnPawnPromotion;
     public enum Turn
     {
         WhitesTurn,

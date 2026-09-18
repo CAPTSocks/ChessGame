@@ -6,12 +6,12 @@ using UnityEngine.UIElements;
 
 public class Knight : Piece
 {
-    private float moveTime = .25f;
-    private Vector2 startPos = Vector2.zero;
+    //private float moveTime = .25f;
+    //private Vector2 startPos = Vector2.zero;
     private Vector2 firstMove = Vector2.zero;
     private Vector2 secondMove = Vector2.zero;
     private Vector2 endMove = Vector2.zero;
-    private float elapsedTime = 1f;
+   // private float elapsedTime = 1f;
     private bool movedX = false;
 
     private static readonly Vector2Int[] Directions =

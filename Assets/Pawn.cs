@@ -92,6 +92,22 @@ public class Pawn : Piece
         return attackTiles;
     }
 
+    private void CheckForPromotion(Tile moveTile)
+    {
+        Debug.Log("Checking for promotion");
+
+        if (pieceColor == PieceColor.White && moveTile.gridPos.y == 0)
+        {
+            Debug.Log("Promoting white pawn");
+            gridRef.PromotePawn(this, moveTile);
+        }
+        else if (pieceColor == PieceColor.Black && moveTile.gridPos.y == 7)
+        {
+            Debug.Log("Promoting black pawn");
+            gridRef.PromotePawn(this, moveTile);
+        }
+    }
+
     public override void Move(Tile moveTile)
     {
         hasMoved = true;
@@ -99,7 +115,8 @@ public class Pawn : Piece
         startPos = transform.position;
         endPos = moveTile.transform.position;
         elapsedTime = 0;
-        moving = true; 
+        moving = true;
+        CheckForPromotion(moveTile);
         //transform.position = moveTile.transform.position;
         
     }
@@ -130,6 +147,8 @@ public class Pawn : Piece
             transform.position = Vector2.Lerp(startPos, endPos, percentageComplete);
         }
         else
-            moving = false; 
+        {
+            moving = false;
+        }
     }
 }
