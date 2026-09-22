@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -7,6 +8,7 @@ public class King : Piece
 {
     //public Sprite sprite;
     //public PieceColor pColor;
+    private bool inCheck = false;
 
     private static readonly Vector2Int[] Directions =
 {
@@ -44,8 +46,16 @@ public class King : Piece
                 legalMovesVectors.Add(move);
                 continue;
             }
-        }
 
+    }
+        if (hasMoved == false)
+        {
+            var castlemoves = gridRef.CheckIfCanCastle(this);
+            foreach (var move in castlemoves)
+            {
+                legalMovesVectors.Add(move);
+            }
+        }
         return legalMovesVectors;
     }
 
@@ -68,6 +78,11 @@ public class King : Piece
     public override void Take()
     {
         throw new System.NotImplementedException();
+    }
+
+    private void Castle()
+    {
+
     }
 
 

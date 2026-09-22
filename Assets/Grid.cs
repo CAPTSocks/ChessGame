@@ -232,7 +232,7 @@ public class Grid : MonoBehaviour
 
             }
             highLightedTiles.Clear();
-            if(selectedPiece != null)
+            if (selectedPiece != null)
             {
                 selectedPiece.toggleHighlight();
             }
@@ -289,11 +289,11 @@ public class Grid : MonoBehaviour
 
     public bool CheckTileIsOccupied(Vector2Int move)
     {
-        if (gridArray[move.x, move.y].tileOccupied )
+        if (gridArray[move.x, move.y].tileOccupied)
         {
-            return false; 
+            return false;
         }
-        return true; 
+        return true;
     }
 
     public bool CheckTilePieceColor(Vector2Int move, Piece.PieceColor color)
@@ -329,6 +329,98 @@ public class Grid : MonoBehaviour
         promotedPiece.IntializePiece(tile.gridPos, tile.transform.position, pawn.pieceColor, this);
 
         //Instantiate the promoted piece and add it to the tile
+    }
+    public void CheckForCheck(Piece.PieceColor color)
+    {
+        List<Piece> piecesToCheck = new List<Piece>();
+        if (color == Piece.PieceColor.White)
+        {
+            piecesToCheck = blackPieces;
+        }
+        else
+        {
+            piecesToCheck = whitePieces;
+        }
+        foreach (var piece in piecesToCheck)
+        {
+            var legalMoves = piece.LegalMoves();
+            foreach (var move in legalMoves)
+            {
+                if (CheckMoveIsInBounds(move))
+                {
+                    int x = (int)move.x;
+                    int y = (int)move.y;
+                    if (gridArray[x, y].tileOccupied && gridArray[x, y].occupiedPiece is King)
+                    {
+                        Debug.Log("Check");
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public List<Vector2> CheckIfCanCastle(Piece king)
+    {
+        if (king.hasMoved == true)
+        {
+            return null;
+        }
+        List<Vector2> moves = new List<Vector2>(); 
+        bool leftTilesClear = true;
+        bool rightTilesClear = true;
+
+     
+        Vector2Int checkedTile = king.cordinates - new Vector2Int(1, 0);
+
+        //Check tiles left of king are empty
+        while (checkedTile.x != 0)
+        {   
+            if (gridArray[checkedTile.x, checkedTile.y].tileOccupied == true)
+            {
+                leftTilesClear = false;
+                break; 
+            }
+            checkedTile = checkedTile - new Vector2Int(1, 0);
+        }
+
+        checkedTile = king.cordinates + new Vector2Int(1, 0);
+
+        //Check tiles right of King are empty
+        while (checkedTile.x != 7)
+        {           
+            if (gridArray[checkedTile.x, checkedTile.y].tileOccupied == true)
+            {
+                rightTilesClear = false;
+                break;
+            }
+            checkedTile = checkedTile + new Vector2Int(1, 0);
+        }
+
+        //Check if rook has moved and is there
+        if (leftTilesClear)
+        {
+            Vector2Int leftRookCords = king.cordinates - new Vector2Int(4, 0);
+            if (gridArray[leftRookCords.x, leftRookCords.y].occupiedPiece is Rook && gridArray[leftRookCords.x, leftRookCords.y].occupiedPiece.hasMoved == false)
+            {
+                Vector2Int leftMove = king.cordinates - new Vector2Int(2, 0);
+                moves.Add(leftMove);
+                
+            }
+        }
+
+        if (rightTilesClear)
+        {
+            Vector2Int rightRookCords = king.cordinates + new Vector2Int(3, 0);
+            if (gridArray[rightRookCords.x, rightRookCords.y].occupiedPiece is Rook && gridArray[rightRookCords.x, rightRookCords.y].occupiedPiece.hasMoved == false)
+            {
+                Vector2Int rightMove = king.cordinates + new Vector2Int(2, 0);
+                moves.Add(rightMove);
+
+            }
+        }
+
+        return moves;
     }
 
 }
